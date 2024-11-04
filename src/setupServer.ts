@@ -7,6 +7,9 @@ import hpp from "hpp";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
+import { Server } from "socket.io"
+import { createClient } from "redis";
+import { createAdapter } from "@socket.io/redis-adapter";
 import "express-async-errors"
 import { config } from "./config";
 
@@ -58,14 +61,27 @@ export class LegBookServer {
   private async startServer(app: Application): Promise<void> {
     try {
       const httpServer: http.Server = new http.Server(app);
+      const socketIO = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
-
+      this.startSocketIO(httpServer);
     } catch (error) {
       console.error(error);
     }
   }
 
-  private createSocketIO(httpServer: http.Server): void {}
+  private async createSocketIO(httpServer: http.Server): Promise<Server> {
+    const io: Server = new Server(httpServer, {
+      cors: {
+        origin: config.CLIENT_URL,
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      },
+    });
+    const pubClient = createClient({ url: config.REDIS_URL});
+    const subClient = pubClient.duplicate();
+    await Promise.all([pubClient.connect(), subClient.connect()]);
+    io.adapter(createAdapter(pubClient, subClient));
+    return io;
+  }
 
   private startHttpServer(httpServer: http.Server): void {
     httpServer.listen(SERVER_PORT, () => {
@@ -73,4 +89,6 @@ export class LegBookServer {
     }
     );
   }
+
+  private startSocketIO(httpServer: http.Server): void {}
 }

@@ -9,6 +9,7 @@ class Config {
   public SECRET_COOKIE_ONE: string | undefined;
   public SECRET_COOKIE_TWO: string | undefined;
   public CLIENT_URL: string | undefined;
+  public REDIS_URL: string | undefined;
 
   private DEFAULT_DATABASE_URL = 'mongodb://localhost:27017/legbook-backend';
 
@@ -19,6 +20,7 @@ class Config {
     this.SECRET_COOKIE_ONE = process.env.SECRET_COOKIE_ONE || '';
     this.SECRET_COOKIE_TWO = process.env.SECRET_COOKIE_TWO || '';
     this.CLIENT_URL = process.env.CLIENT_URL || '';
+    this.REDIS_URL = process.env.REDIS_URL || '';
   }
 
   public validateConfig(): void {
