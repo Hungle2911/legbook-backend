@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express, { Express } from 'express';
 import { LegBookServer } from './setupServer';
 import databaseConnection from './setupDatabases';
 import { config } from './config';
