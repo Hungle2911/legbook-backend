@@ -8,6 +8,7 @@ import morgan from "morgan";
 import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
 import "express-async-errors"
+import { config } from "./config";
 
 const SERVER_PORT = 8000;
 export class LegBookServer {
@@ -28,18 +29,19 @@ export class LegBookServer {
     app.use(
       cookieSession({
         name: "session",
-        keys: ["key1", "key2"],
+        keys: [config.SECRET_COOKIE_ONE!, config.SECRET_COOKIE_TWO!],
         maxAge: 24 * 60 * 60 * 1000,
-        secure: false,
+        secure: config.NODE_ENV !== "development",
       }),
     );
     app.use(cors(
       {
-        origin: "http://localhost:5173",
+        origin: config.CLIENT_URL,
         credentials: true,
       },
     ));
     app.use(helmet());
+    app.use(hpp());
   }
 
   private standardMiddlewares(app: Application): void {
