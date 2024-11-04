@@ -12,6 +12,7 @@ import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import "express-async-errors"
 import { config } from "./config";
+import applicationRouter from "./routes";
 
 const SERVER_PORT = 8000;
 export class LegBookServer {
@@ -54,7 +55,9 @@ export class LegBookServer {
     app.use(morgan("dev"));
   }
 
-  private routeMiddlewares(app: Application): void {}
+  private routeMiddlewares(app: Application): void {
+    applicationRouter(app);
+  }
 
   private globalErrorHandler(app: Application): void {}
 
