@@ -14,8 +14,11 @@ import "express-async-errors"
 import { config } from "./config";
 import applicationRouter from "./routes";
 import { CustomError, IErrorResponse } from "./shared/globals/helpers/error-handler";
+import Logger = require("bunyan");
 
 const SERVER_PORT = 8000;
+const logger: Logger = config.getLogger('server');
+
 export class LegBookServer {
   private app: Application;
 
@@ -66,7 +69,7 @@ export class LegBookServer {
     });
 
     app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) : any => {
-      console.error(error);
+      logger.error(error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json(error.serializeErrors());
       }
@@ -81,7 +84,7 @@ export class LegBookServer {
       this.startHttpServer(httpServer);
       this.startSocketIO(httpServer);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 
@@ -101,7 +104,7 @@ export class LegBookServer {
 
   private startHttpServer(httpServer: http.Server): void {
     httpServer.listen(SERVER_PORT, () => {
-      console.log(`Server is running on port ${SERVER_PORT}`);
+      logger.info(`Server is running on port ${SERVER_PORT}`);
     }
     );
   }

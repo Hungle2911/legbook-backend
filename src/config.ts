@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import bunyan from 'bunyan';
 
 dotenv.config({});
 
@@ -21,6 +22,10 @@ class Config {
     this.SECRET_COOKIE_TWO = process.env.SECRET_COOKIE_TWO || '';
     this.CLIENT_URL = process.env.CLIENT_URL || '';
     this.REDIS_URL = process.env.REDIS_URL || '';
+  }
+
+  public getLogger(name: string): bunyan {
+    return bunyan.createLogger({ name, level: 'debug' });
   }
 
   public validateConfig(): void {
