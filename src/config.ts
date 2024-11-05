@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import bunyan from 'bunyan';
+import cloudinary from 'cloudinary';
 
 dotenv.config({});
 
@@ -11,6 +12,9 @@ class Config {
   public SECRET_COOKIE_TWO: string | undefined;
   public CLIENT_URL: string | undefined;
   public REDIS_URL: string | undefined;
+  public CLOUDINARY_CLOUD_NAME: string | undefined;
+  public CLOUDINARY_API_KEY: string | undefined;
+  public CLOUDINARY_API_SECRET: string | undefined;
 
   private DEFAULT_DATABASE_URL = 'mongodb://localhost:27017/legbook-backend';
 
@@ -22,6 +26,9 @@ class Config {
     this.SECRET_COOKIE_TWO = process.env.SECRET_COOKIE_TWO || '';
     this.CLIENT_URL = process.env.CLIENT_URL || '';
     this.REDIS_URL = process.env.REDIS_URL || '';
+    this.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || '';
+    this.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || '';
+    this.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || '';
   }
 
   public getLogger(name: string): bunyan {
@@ -34,6 +41,14 @@ class Config {
         throw new Error(`Missing environment variable: ${key}`);
       }
     }
+  }
+
+  public cloudinaryConfig(): void {
+    cloudinary.v2.config({
+      cloud_name: this.CLOUDINARY_CLOUD_NAME,
+      api_key: this.CLOUDINARY_API_KEY,
+      api_secret: this.CLOUDINARY_API_SECRET,
+    });
   }
 }
 export const config: Config = new Config();

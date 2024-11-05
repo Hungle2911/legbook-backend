@@ -15,6 +15,7 @@ class Application {
   private loadConfig(): void {
     // Make sure all required environment variables are set
     config.validateConfig();
+    config.cloudinaryConfig()
   }
 }
 const application: Application = new Application();
