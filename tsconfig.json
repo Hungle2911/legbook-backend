@@ -29,7 +29,7 @@
       }
     ],
     "paths": {
-      "@global/*": ["src/shared/global/*"],
+      "@global/*": ["src/shared/globals/*"],
       "@service/*": ["src/shared/services/*"],
       "@socket/*": ["src/shared/sockets/*"],
       "@worker/*": ["src/shared/workers/*"],
