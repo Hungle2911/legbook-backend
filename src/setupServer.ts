@@ -2,7 +2,7 @@ import { Application, json, urlencoded, Response, Request, NextFunction } from '
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
-import compression = require('compression');
+import compression from 'compression';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import cookieSession from 'cookie-session';
@@ -14,7 +14,7 @@ import 'express-async-errors';
 import { config } from './config';
 import applicationRouter from './routes';
 import { CustomError, IErrorResponse } from './shared/globals/helpers/error-handler';
-import Logger = require('bunyan');
+import Logger from 'bunyan';
 
 const SERVER_PORT = 8000;
 const logger: Logger = config.getLogger('server');
